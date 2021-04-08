@@ -1,0 +1,592 @@
+\documentclass[a4paper,8pt]{extarticle}
+\usepackage[utf8]{inputenc}
+
+\usepackage{fancyhdr}
+
+\usepackage[pdftex]{graphicx} % Required for including pictures
+\usepackage[pdftex,linkcolor=black,pdfborder={0 0 0}]{hyperref} % Format links for pdf
+\usepackage{calc} % To reset the counter in the document after title page
+\usepackage{enumitem} % Includes lists
+
+\usepackage{textcomp}
+\usepackage{eurosym}
+
+\usepackage{ dsfont } % font za množice
+% tabele
+\usepackage{array}
+\usepackage{wrapfig}
+
+\usepackage{tikz,forest}
+\usetikzlibrary{arrows.meta}
+
+\frenchspacing % No double spacing between sentences
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.3em}
+
+\usepackage{mathtools}
+\usepackage{blkarray, bigstrut} %
+
+
+\usepackage{amssymb,amsmath,amsthm,amsfonts}
+\usepackage{multicol,multirow}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage{tabularx}
+\usepackage[landscape]{geometry}
+%\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
+%\usepackage{accents}
+
+\newcommand{\vect}[1]{\accentset{\rightharpoonup}{#1}}
+
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+    { \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+\pagestyle{empty}
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{0}
+%\setlength{\parindent}{0pt}
+%\setlength{\parskip}{0pt plus 0.5ex}
+% -----------------------------------------------------------------------
+
+\title{Optimizacijske metode}
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{multicols}{4}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Optimizacijske naloge}
+Optimizacijska naloga je $(\Omega, f, \text{max/min/sup/inf}, )$ kjer je:
+\begin{itemize}
+	\item $\Omega$ množica dopustnih rešitev
+	\item $f: \Omega \to \mathbb{R}$ kriterijska funkcija
+\end{itemize}
+$x^* \in \Omega$ je \emph{optimalna} rešitev problema $(\Omega, f, \max)$, če velja
+\[\forall x \in \Omega : f(x) \leq f(x^*)\]
+
+\begin{forest} 
+	[{\textbf{Optimizacijski problem}}
+		[{Nedopustni \\ $\Omega = \emptyset$ }, align=center
+		]   
+		[{Dopustni \\ $\Omega \neq \emptyset$}, align=center
+			[{Neomejen \\ \textit{kriterijska f. neomejena} \\ $\max x$ \\ p.p. $x\geq 0$}, align=center]   
+			[Omejen \\ \textit{kriterijska f. omejena}, align=center
+				[Optimalni \\ \textit{zaprta meja} \\ $\max x$ \\ p.p. $0 \leq x \leq 1$, align=center]
+				[Neoptimalni \\ \textit{odprta meja} \\ $\max x$ \\ p.p. $0 \leq x \leq 1$, align=center]
+			]
+		]   
+	] 
+\end{forest}
+
+\section{Linearno programiranje}
+$(\Omega, f, \text{min/max})$ je linearni porgram, če je $\Omega$ podana z linearnimi enakostmi in neenakostmi ($\leq$, $\geq$) in je $f$ linearna.
+
+\subsection{Standardna oblika linearnega pograma}
+Linearni porgram je v \emph{standardni} obliki, če iščemo $\max$ in so vsi pogoji neenakosti $\leq$ in so vse spremenljivke nenegativne.
+\begin{align*}
+	\begin{array}{l r@{\;} l} % c@{\hspace{50pt}} r c r@{{}={}} r
+		\max 		& c_1 x_1 + \dots + c_n x_n	\\		
+		\text{p.p.} & a_{11} x_1 + \dots + a_{1n} x_n &\leq b_1 \\
+		& 									& \  \vdots \\										
+		& a_{m1} x_1  + \dots + a_{mn} x_n &\leq b_m \\
+		& x_1, \dots , x_n & \geq 0
+	\end{array}
+\end{align*}
+
+To lahko zapišemo v matrični obliki:
+\begin{align*}
+	c = [c_1 \dots c_n]^T &&
+	b = [b_1 \dots b_m]^T &&
+	x = [x_1 \dots x_n]^T &&
+\end{align*}
+\begin{align*}
+	A = \begin{bmatrix}
+		a_{11} & \dots & a_{1n} \\
+		\vdots & 	   & \vdots \\
+		a_{m1} & \dots & a_{mn} \\
+	\end{bmatrix}
+	\in \mathbb{R}^{m \times n}
+	&&
+	\begin{array}{l@{\hspace{10pt}} c}
+		\max & c^Tx \\
+		\text{p.p.} & Ax \leq b \\
+		& x \geq 0
+	\end{array}
+\end{align*}
+
+Vsak linearen program lahko zapišemo v standardni obliki.
+
+	Vse dele linearnega programa lahko preoblikujemo tako, da bodo v standardni obliki:
+	\begin{align*}
+		\min f(x) &\leadsto \max(-f(x)) \\
+		f(x) \geq b &\leadsto -f(x) \leq -b \\
+		f(x) = b &\leadsto f(x) \leq b \wedge f(x) \geq b \\
+		x_i \leq 0 &\leadsto x_i = -x_i' \\
+		x_i \gtrless 0 &\leadsto  x_i = x_i' - x_i'' \wedge x_i', x_i'' \geq 0
+	\end{align*}
+
+\subsection{Konveksne množice}
+Množica $A \subseteq \mathbb{R}^n $ je \emph{konveksna}, če velja:
+\[ \forall x,y \in A \ \forall \lambda \in [0,1] : (1-\lambda)x + \lambda y \in A \]
+\emph{Daljica med poljibnima točkama iz $A$ mora biti vsebovana v $A$.}\\
+
+Množica \textbf{ni} konveksna, če
+\[\exists x,y \in A \ \exists \lambda \in [0, 1]: (1-\lambda)x + \lambda y \notin A \]
+\textbf{Afina kombinacija:}
+\begin{align*}
+	\alpha_1 x_1 + \dots + \alpha_n x_n && \alpha_1 + \dots + \alpha_n = 1
+\end{align*}
+
+\textbf{Konveksna kombinacija:}
+\[ \alpha_1 x_1 + \dots + \alpha_n x_n \]
+\begin{align*}
+	\alpha_1 + \dots + \alpha_n = 1 && \alpha_1 + \dots + \alpha_n \geq 0 
+\end{align*}
+
+\emph{Afin podprostor} ( = zaprt za afine kokmbinacije = premaknjen linearen prostor) je \emph{konveksen}.
+
+Presek konveksnih množic $A_i, \forall i\in I$ je konveksen.
+
+Unija koknveksnih množic pa ni nujno konveksna.
+
+
+\subsection{Grafično reševanje linearnih programov}
+Za linearne porgrame z dvema spremenljivkama lahko narišemo območje, ki ga določajo pogoji. Nato izračunamo gradient kriterijske funkcije in premikamo v smeri gradienta proti točki, ki je v preseku polporostorov pogojev in čim dlje od izhodišča.
+
+\subsection{Simpleksna metoda}
+Linearni program zapišemo v standardni obliki. 
+Če je kak $b_i < 0$, moramo uporabiti \textbf{dvofazno simpleksno metodo}, sicer nadaljujemo.
+
+
+Linearni porgram zapišemo v \emph{prvi} slovar.
+\begin{gather*}
+	\overbrace{
+		\begin{array}{r@{\;} l}
+			x_{n+1} &= b_1  - a_{11} x_1 - \dots - a_{1n} x_n \\
+			& \ \vdots \\
+			x_{n+m} &= b_m - a_{m1} x_1 - \dots - a_{mn} x_n \\ \hline
+			z &= c_1 x_1 + \dots + c_n x_n
+		\end{array}
+	}^{\text{1. slovar}}
+\end{gather*}
+
+Vse spremenljivke $x_1, \dots, x_{n+m}$ so nenegativne.
+
+Spremenljivke na levi so \textbf{bazne}, na desni pa \textbf{nebazne}.
+\begin{align*}
+	x_1, \dots, x_n &\quad \dots \quad \textbf{prvotne} \text{ spremenljivke} \\
+	x_{n+1}, \dots, x_{n+m} &\quad \dots \quad \textbf{dopolnilne} \text{ spremenljivke}
+\end{align*}
+Slovar je \textbf{dopusten}, če so vse konstante (čelni brez $x$) na desni nenegativne.
+
+Če je slovar dopusten, ima \emph{bazno} dopustno rešitev: vse \emph{nebazne} spremenljivke so 0 in kriterijska funkcija je tedaj $z = 0$.
+\begin{itemize}
+	\item Določimo:
+	\begin{itemize}
+		\item \textbf{vstopno spremenljivko}: izberem spremenljivko, ki ima v kriterijski funkciji pozitiven koeficient. \\
+		\item \textbf{pivotno vrstico}: enakost, ki povečanje vstopne spremenljivke najbolj omejuje. Če ni omejena, je problem \textbf{neomejen} in končamo.\\
+		\item \textbf{izstopno spremenljivko}: bazna spremenljivka v pivotni vrestici
+	\end{itemize}
+	\item Iz pivotne vrstice izrazimo vstopno spremenljivko in pivotno vrstico zamenjamo z izražavo (vstopna spremenljivka gre v bazo na levo stran).
+	\item V ostalih vrsticah in kriterijski funkciji vstopno spremenljivko nadomestimo z zgornjo izražavo.
+	\item Dobimo naslednji slovar. Postopek ponavljamo dokler niso vsi koeficienti v kriterijski funkciji negativni ali enaki 0.
+\end{itemize}
+
+Iz zadnjega slovarja razberemo optimalne rešitve: spremenljivke, ki imajo v kriterijski funkiciji negativen koeficient imajo vrednost 0, ostale pa lahko spreminjamo glede na omejitve.
+
+\subsection{Dvofazna simpleksna metoda}
+Če je $b \ngeq 0$, uporabimo dvofazno simpleksno metodo.
+\subsubsection*{Prva faza}
+Konstruiramo pomožni problem. V vsaki neenakosti $b_i$ prištejemo $x_0$. Kriterijsko funkcijo pa spremenimo v $\max -x_0$.
+
+Iz pomožnega problema zapišemo 1. slovar.
+\begin{align*}
+	\begin{array}{r@{\;} l}
+		x_{n+1} &= b_1  + x_0 - a_{11} x_1 - \dots - a_{1n} x_n \\
+		& \ \vdots \\
+		x_{n+m} &= b_m + x_0 - a_{m1} x_1 - \dots - a_{mn} x_n \\ \hline
+		w &= -x_0
+	\end{array}
+\end{align*}
+
+Za vstopno spremenljivko izberemo $x_0$ za pivotno vrstico pa tisto v kateri je $b_i$ najmanjši. Nato nadaljujemo z običajno simpleksno metodo.
+
+Nadaljujemo z navadno simpleksno metodo in upoštevamo pravilo: $x_0$ ima prednost med kandidati za izstopno spremenljivko.
+
+Če $w* < 0$, prvotni problem ni dopusten, sicer nadlajujemo z drugo fazo.
+
+\subsubsection*{Druga faza}
+Iz zadnjega slovarja pomežnega problem izbrišemo $x_0$ in kriterijsko funkcijo originalnega programa izrazimo z nebaznimi spremenljivkami. Nadaljujemo z običajno simpleksno metodo.
+
+\section{Dualnost pri linearnem programiranju}
+Vsak linearni program $P$ ima dualno obliko $P'$:
+
+\begin{align*}
+	\begin{array}{l@{\hspace{10pt}} c}
+		\max & c^Tx \\
+		\text{p.p.} & Ax \leq b \\
+		& x \geq 0
+	\end{array}
+	&& \implies &&
+	\begin{array}{l@{\hspace{10pt}} c}
+		\min & b^Ty \\
+		\text{p.p.} & A^Ty \geq c \\
+		& y \geq 0
+	\end{array}
+\end{align*}
+
+
+	\[P'' = P\]
+
+
+\subsubsection*{Šibki izrek o dualnosti - ŠID}
+$x$ dopustna rešitev za $P$, $y$ dopustna rešitev za $P'$ $\implies$ 
+\[c^Tx \leq b^Ty \]
+
+$x$ dopustna za $P$, $y$ dopustna za $P'$ in $c^Tx = b^Ty$ $\implies$
+\[	x \textnormal{ optimalna rešitev } P\textnormal{, } y \textnormal{ optimalna rešitev} P' \]
+
+\subsubsection*{Krepki izrek o dualnosti - KID}
+
+$x^*$ optimalna rešitev $P$ $\implies$
+\begin{align*}
+	\textnormal{ optimalna rešitev } P' \textnormal{ in } c^Tx^* = b^Ty^*
+\end{align*}
+
+Linearni program in njegov dual sta lahko:
+\begin{tabular}{ r | c | c | c |}
+	& nedopusten & neomejen & optimalen \\ \hline
+	nedopusten 	& \checkmark & \checkmark & $//_{\text{KID}}$ \\ \hline
+	neomejen 	& \checkmark & $//_{\text{ŠID}}$		 & $//_{\text{ŠID, KID}}$ \\ \hline
+	optimalen 	& $//_{\text{KID}}$ 		& $//_{\text{ŠID, KID}}$		& \checkmark \\ \hline
+\end{tabular}
+	
+\subsubsection*{Dualno dopolnjevanje}
+
+Naj bo $x$ dopustna za $P$ in $y$ dopustna za $P'$ tedaj je:
+
+$x$ optimalna za $P$ in $y$ optimalna za $P'$ $\iff$
+\begin{align*}
+	\forall i = 1,\dots , m :\ && \sum_{j=1}^n a_{ij} x_j = b_i \quad &\text{ali} \quad y_i = 0 \\
+	\forall j = 1,\dots , n :\ && x_j = 0 \quad &\text{ali} \quad \sum_{i=1}^m a_{ij} y_i = c_j   \\
+\end{align*}
+
+\textbf{Ekvivalentno:} $x$ optimalna za $P$, y optimalna za $P'$ $\Leftrightarrow$
+\begin{align*}
+	\sum_{j=1}^n a_{ij} x_j < b_i &\implies y_i = 0 \quad \forall i \\
+	&\ \ \text{in} \\
+	x_j > 0 &\implies \sum_{i=1}^m a_{ij} y_i = c_j \quad \forall j \\
+\end{align*}
+
+\subsection*{Uporaba izreka o dualnem dopolnjevanju}
+Želimo dokazati, da je $x^*$ optimalna rešitev linearnega programa $P$.
+
+\begin{enumerate}
+	\item Preverimo, da je $x^*$ dopustna rešitev.
+	\item Če je kakšna neenakost pri pogojih $P$ izpolnjena s strogo neenakostjo, je pripadajoča dualna spremenljivka $y^*_i = 0$.
+	\item Če je kaka $x^*_j > 0$, je pripadajoča dualna neenakost v $p'$ izpolnjena z enakostjo: \[\sum_{i=1}^n a_{ij} y_i = c_j \]
+	\item Vzamemo enačbe iz 3. koraka in upoštevamo, da so nekateri $y$ iz 2. koraka enaki 0. Rešimo dobljeni sistem (če ni rešljiv, $x^*$ ni optimalna).
+	\item Preverimo ali je dobljena rešitev $y^*$ dopustna. Če je, sta $x^*$ in $y^*$ optimalni.
+\end{enumerate}
+
+\subsection*{Dual splošnega problema}
+Splošna oblika linearnega programa je manj stroga standardna oblika.
+Dovolimo, da so pogoji postavljeni z $\leq$ lahko pa tudi z $=$. Poleg tega dovolimo, da nekatere spremenljivke niso omejene z $x_j \geq 0$.
+
+Program v splošni obliki izgleda takole:
+\begin{align*}
+	\begin{array}{l r@{\;} l >{\scriptsize}l}
+		\max 		& \sum_{j=1}^n c_j x_j	\\		
+		\text{p.p.} & \sum_{j=1}^n a_{ij} x_i 	&\leq b_i	& \forall i=1,\dots , m'\\
+					& \sum_{j=1}^n a_{ij} x_i 	&= b_i	& \forall i=m'+1,\dots , m\\
+					& x_i 	 					&\geq 0	&\forall i=1,\dots , n'
+	\end{array}
+\end{align*}
+
+Njegov dual pa je:
+\begin{align*}
+	\begin{array}{l r@{\;} l >{\scriptsize}l}
+		\min 		& \sum_{i=1}^m b_i y_i	\\		
+		\text{p.p.} & \sum_{i=1}^m a_{ij} y_i 	&\leq c_j	& \forall j=1,\dots , n'\\
+					& \sum_{i=1}^m a_{ij} y_i 	&= c_j	& \forall j=n'+1,\dots , n\\
+					& y_i 	 					&\geq 0	&\forall i=1,\dots , m'
+	\end{array}
+\end{align*}
+\begin{align*}
+	\text{enakost} &\overset{\text{dual}}{\longleftrightarrow} \text{poljubna spremenljivka} \\
+	\text{neenakost} &\overset{\text{dual}}{\longleftrightarrow} \text{nenegativna spremenljivka} 	
+\end{align*}
+
+\subsection*{Dualno dopolnjevanje splošnega problema}
+$x$ dopustna za $P$\\
+$y$ dopustna za $P'$\\
+
+$x$ optimalna za $P$ in $y$ optimalna za $P'$ $\Leftrightarrow$
+
+\begin{align*}
+	\forall i = 1,\dots , m':\ && \sum_{j=1}^n a_{ij} x_j = b_i \quad &\text{ali} \quad y_i = 0 \\
+	\forall j = 1,\dots , n' :\ && x_j = 0 \quad &\text{ali} \quad \sum_{i=1}^m a_{ij} y_i = c_j   \\
+\end{align*}
+
+
+\subsection*{Ekonomski pomen dualnih spremenljivk}
+Naj bo $P$ linearni program, $\exists$ neizrojena optimalna rešitev (v zadnjem slovarju so vse konstante $> 0$). Potem $\exists \varepsilon > 0$, da velja
+	\[\Delta z^* = \sum_{i=1}^m y_i^* \Delta b_i\]
+	kjer je $y^*$ optimalna rešitev duala, $\Delta z^*$ sprememba optimalne vrednosti, $\Delta b_i$ pa sprememba dense strani pogojev in $|\Delta b_i| < \varepsilon$.
+
+
+Torej če desni strani pogojev v $P$ prištejemo dovolj majhen $\Delta b$, se optimalna vrednost $z^*$ programa $P$ spremeni za $\Delta z^* = \Delta b^T y^*$. 
+
+$y*$ nam tedaj da ``tržno ceno'' dobrin. Če želimo povečati dobrino $b_i$, se nam dobiček poveča za $b_i y_i^*$. Torej za enoto dobrine $i$ ne smemo plačati več kot $y_i^*$.
+
+\section{Matrične igre}
+Igro igrata 2 igralca. Prvi ima $n$, drugi pa $m$ strategij.
+
+\textbf{Plačilna matrika} $A$ ima $n$ vrstic in $m$ stoplcev. Celica v $i$. vrstici in $j$. stolpcu predstavlja znesek, ki ga drugi plača prvemu, če prvi izbere strategijo $i$, drugi pa $j$. (Če je vrednost negativna, privi plača drugemu.)
+
+Igralca igrata po principu najmanjšega tveganja: izbereta strategijo pri kateri v najslabšem primeru izgubita čim manj.
+
+\begin{align*}
+	\text{1. igralec: } && \max_i \min_j a_{ij} &=: M_1 \\
+	\text{2. igralec: } && \min_j \max_i a_{ij} &=: M_2
+\end{align*}
+
+\[ M_1 \leq M_2\]
+
+$(i_0, j_0)$ je \textbf{sedlo} plačilne matrike $A$, če je $a_{i_0 j_0}$ najmanjši v svoji vrstici in največji v svojem stolpcu.
+
+\[ A \text{ ima sedlo } \iff M_1 = M_2 = a_{i_0 j_0}\]
+
+Če ima $A$ sedlo, je $i_0$ optimalna strategija za prvega, $j_0$ pa za drugega igralca. V tem primeru je $(i_0, j_0)$ \emph{Nashevo ravnovesje} in nobenemu igralcu se ne splača spremeniti strategije.
+
+\subsection*{Mešana strategija}
+Igralca svoje strategije izbirata nakjučno z verjetnostjo $x_i$ oziroma $y_j$.
+
+\begin{align*}
+	x = (x_1, \dots, x_n) && x_1 \geq 0 && x_1 + \dots + x_n = 1 \\
+	y = (y_1, \dots, y_n) && y_1 \geq 0 && y_1 + \dots + y_m = 1 
+\end{align*}
+
+\textbf{Matematično upanje} je povprečno izplačilo, če bi igralca igrala veliko iger. Vsako celico v plačilni matriki pomnožimo z verjetnostjo, da bo prišlo do tega izida, in vrednosti seštejemo.
+\[ \sum_{i=1}^n \sum_{j=1}^m a_{ij} x_i y_j = \sum_{i=1}^n \left( \sum_{j=1}^m a_{ij} y_j \right) x_i = x^T A y\]
+
+Če 1. igralec igra z neko mešano strategijo $x$, je
+\[ \min_y x^T A y = \min_{j=1,\dots , m} \sum_{i=1}^n a_{ij} x_i\]
+To pomeni, da se 2. igralec lahko na mešano strategijo optimalno brani z neko \textbf{čisto strategijo} $y = (0,\dots,1,\dots,0)$.
+
+\subsection*{Iskanje optimalne strategije}
+Upoštevajoč, da se na mešano strategijo nasprotnik lahko brani z čisto strategijo, dobimo optimizacijska problema.
+\begin{align*}
+	\text{1. igralec išče } && \max_x \min_y x^TAy &= \max_x \min_{j=1,\dots , m} \sum_{i=1}^n a_{ij} x_i\\
+	\text{2. igralec išče } && \min_y \max_x x^TAy &= \min_y \max_{i=1,\dots , n} \sum_{j=1}^m a_{ij} y_j
+\end{align*}
+Problema zapišemo kot linerana programa.
+
+\emph{1. igralec:}
+\begin{align*}
+	\begin{array}{l >{\displaystyle}r@{\;} l l}
+		\max 		& s	\\		
+		\text{p.p.} & -\sum_{i=1}^n a_{ij} x_i + s 	&\leq 0	& \forall j=1,\dots , m\\
+		& \sum_{i=1}^n x_i  			&= 1	& \\
+		& x_i 	 						&\geq 0	&\forall i=1,\dots , n
+	\end{array}
+\end{align*}
+\emph{2. igralec:}
+\begin{align*}
+	\begin{array}{l >{\displaystyle}r@{\;} l l}
+		\min 		& t	\\		
+		\text{p.p.} & -\sum_{j=1}^m a_{ij} y_j + t 	&\geq 0	& \forall i=1,\dots , n\\
+					& \sum_{j=1}^m y_j  			&= 1	& \\
+					& y_j 	 						&\geq 0	&\forall j=1,\dots , m
+	\end{array}
+\end{align*}
+
+Opazimo, da sta si linearna programa dualna.
+Oba problema sta optimalna in imata enako optimalno vrednost. To je \textbf{vrednost}/\textbf{strateško sedlo} igre.
+
+Strategiji $x^*$ in $y^*$ sta optimalni $\iff$ sta dopustni in velja
+\[ \min_j \sum_{i=0}^n a_{ij} x_i^* = \max_i \sum_{j=1}^m a_{ij} y_j^*\]
+
+Igra je \textbf{poštena} $\iff$ ima vrednost 0.
+
+Igra je \textbf{simetrična}, če je $A = -A^T$. Tedaj ima vrednost 0 in je poštena.
+
+\subsection*{Poenostavljanje plačilne matrike}
+Vektor $x$ \textbf{dominira} $x'$, če je $\forall i : x_i \geq x_i'$.
+
+Če $i$. vrstica dominira $i'$. vrstico v plačilni matriki, lahko $i'$. vrstico odstranimo.\\
+Če $j$. stoplec dominira $j'$. stolpec v plačilni matriki, lahko $j$. stolpec odstranimo.
+
+S tem ne spremenimo optimalne vrednosti.
+
+\section{Problem razvoza}
+Imamo usmerjen graf $G = (V,E)$. $G$ je povezan kot neusmerjen graf.
+\begin{align*}
+	b_v \quad &\dots \quad \text{poraba$-$proizvodnja v vozlišču $v \in V$}\\
+	c_e \quad &\dots \quad \text{cena povezave $e \in E$} \\
+	x_e \quad &\dots \quad \text{količina razvoza na povezavi $e \in E$}
+\end{align*}
+Poraba mora biti enako velika kot proizvodnja.
+\[ \sum_{v\in V} b_v = 0\]
+
+Rešitev problema je vrednost razvoza za vsako povezavo $x_e$. Da je rešitev dopustna mora veljati 
+\[\forall e \in E : \ x_e \geq 0 \]
+\[\forall v \in V : \ \sum_{\text{konec}(e) = v} x_e - \sum_{\text{začetek}(e) = v} x_e = b_v \]
+
+Kriterijska funkcija je vsota cen, ki jih bomo plačali za razvoz. Seveda jo želimo minimizirati.
+\[ \sum_{e \in E} c_e x_e = c^T x\]
+
+Za problem razvoza lahko zapišemo linearni program in njegov dual.
+\begin{align*}
+	\begin{array}{l >{\displaystyle}r@{\;} l}
+		\min 		& c^T x	\\		
+		\text{p.p.} & Ax	& = b	 \\
+					& x 	 						&\geq 0	
+	\end{array} &&
+	\begin{array}{l >{\displaystyle}r@{\;} l}
+		\max 		& b^T y	\\		
+		\text{p.p.} & A^T y	& \leq c	 \\
+	\end{array}
+\end{align*}
+Kjer je $A$ incidenčna matrika
+\begin{align*}
+	A = \begin{bmatrix}
+		a_{ve}
+	\end{bmatrix}_{\substack{v \in V \\ e \in E}}
+	&&
+	a_{ve} = \begin{cases}
+		1 & \text{konec}(e) = v \\
+		-1 & \text{začetek}(e) = v \\
+		0 & \text{sicer}
+	\end{cases}
+\end{align*}
+
+Rešitvi $x$ in $y$ optimalni $\iff$
+\begin{align*}
+	\forall ij \in E: \ &&  x_{ij} = 0 \quad &\vee \quad y_j - y_i = c_{ij}
+\end{align*}
+
+\subsection*{Simpleksna metoda na omrežjih}
+\begin{enumerate}
+	\item Poiščemo drevesno dopustno rešitev $x$
+	\item Rešimo $y_i + c_{ij} = y_j$ za $ij \in T$ \\
+	\emph{Začnemo s poljubnim vozliščem $y_1 = 0$ iz tega lahko izračunamo vrednosti za vsa ostala vozlišča tako, da se premikamo iz začetnega vozlišča in če gremo po pravi smeri, ceno razvoza povečujemo, sicer pa zmanjšujemo} \\
+	Če je $y_i + c_{ij} \geq y_j$ za $\forall ij \in E \setminus T$, je $x$ optimalna rešitev - končamo.
+	\item Če je $y_i + c_{ij} < y_j$ za kak $ij \in E \setminus T$, je $ij$ \textbf{vstopna povezava}. Dodamo jo v $T$ in dobimo cikel.
+	\[ t = \min \{x_e : e \text{ obratna}\}\]
+	Na premih povezavah cikla $x$ povečamo za $t$, na obratnih pa pomanjšamo za $t$.\\
+	Povezava na kateri je minimum dosežen, je \textbf{izstopna povezava} in jo odstranimo iz drevesa. \\
+	Tako dobimo novo vpeto drevo in se vrnemo na korak 2.
+\end{enumerate}
+
+Metoda se lahko zacikla. Ciklanju se izognemo tako, da izberemo koren $r \in V$ in za  izstopno povezavo izberemo najbližjo $r$.
+
+\subsection*{Dvofazna simpleksna metoda na omrežjih}
+Z njo poiščemo začetno drevesno rešitev oziroma dokažemo, da ne obstaja.
+
+Skonstruiramo pomožen problem tako, da izberemo koren $r \in V$ in originalnemu porblemu dodamo povezave za $\forall v \in V$:
+\begin{itemize}
+	\item če je $b_v \geq 0$, dodamo umetno povezamo $rv$ (če še ne obstaja), razvoz $x_{rv} = b_v$, cena $c_v = 1$
+	\item če je $b_v < 0$, dodamo umetno povezamo $vr$ (če še ne obstaja),  razvoz $x_{rv} = -b_v$, cena $c_v = 1$
+\end{itemize}
+Cene originalnih povezav nastavimo na 0.
+
+Rešimo pomožen problem razvoza. Če dobimo rešitev s ceno 0 (ne uporablja pomožnih povezav), je originalni problem dopusten in končna drevesna rešitev pomožnega problema je dopustna drevesna rešitev za prvotni problem. 
+
+Če je proizvodnja večja kot poraba, problem ni rešljiv, a lahko dodamo \textbf{smetišče} z zadostno porabo in ga z brezplačnimi povezavami povežemo z vozlišči s proizvodnjo.
+
+\subsubsection*{Celoštevilske rešitve}
+	Za problem razvoza z $b_v \in \mathbb{Z}$ velja:
+	\begin{itemize}
+		\item če obstaja dopustna rešitev, obstaja tudi celoštevilska dopustna rešitev
+		\item če obstaja optimalna rešitev, obstaja tudi celoštevilska optimalna rešitev
+	\end{itemize}
+
+\subsection*{Königov izrek o plesnih parih}
+\textbf{Dvojno stohastična matrika} je matrika $A \in \mathbb{R}^{n\times n}$ za katero velja:
+\begin{align*}
+	a_{ij} \geq 0 &&
+	\forall i : \ \sum_{j=1}^n a_{ij} = 1 &&
+	\forall j : \ \sum_{i=1}^m a_{ij} = 1
+\end{align*}
+
+\textbf{Permutacijska matrika} je matrika $P \in \{0,1\}^{n\times n}$, ki ima v vsakem stolpcu in vrstici natanko eno 1.
+
+	Naj bo $A$ dvojno stohastična matrika, potem obstaja premutacijska matrika $P$, da velja $p_{ij} > 0 \implies a_{ij} > 0$.
+
+\subsubsection*{Königov izrek o plesnih parih}
+	Naj bo $G$ $r$-regularen graf, potem obstaja popolno prirejanje.
+
+\section{Problem razvoza z omejitvami}
+Imamo usmerjen graf $G = (V,E)$. $G$ je povezan kot neusmerjen graf.
+\begin{align*}
+	b_v \in \mathbb{R} \quad \dots \quad &\text{poraba$-$proizvodnja v vozlišču $v \in V$ }\\
+	c_e \in \mathbb{R} \quad \dots \quad &\text{cena povezave $e \in E$} \\
+	u_e \in [0,\infty] \quad \dots \quad &\text{kapaciteta povezave $e \in E$} \\
+	x_e \in [0, u_e] \quad \dots \quad &\text{količina razvoza na povezavi $e \in E$}
+\end{align*}
+
+Problem razvoza z omejitvami lahko zapišemo kot linearen program:
+\begin{align*}
+	\begin{array}{l >{\displaystyle}r@{\;} l}
+		\min 		& c^T x	\\		
+		\text{p.p.} & Ax	& = b	 \\
+					& x 	 						&\leq u	\\
+					& x 	 						&\geq 0	
+	\end{array}
+\end{align*}
+\begin{align*}
+	x_e = 0 	\quad & \rightarrow \quad \text{prazna povezava} \\
+	x_e = u_e 	\quad & \rightarrow \quad \text{nasičena povezava} \\
+\end{align*}
+Dopustna rešitev $x$ je \textbf{drevesna dopustna rešitev}, če obstaja vpeto drevo $T$, da so vse povezave izven drevesa prazne ali nasičena. 
+\subsection*{Postopek reševanja}
+\begin{itemize}
+	\item Poiščemo začetno dopustno drevesno rešitev $x$ z drevesom $T$
+	\item Izračunamo ceno razvoza $y$ za posamezna vozlišča
+	\item Poiščemo vstopno povezavo $ij \notin T$, ki ustreza:
+	\begin{itemize}
+		\item prazna: $x_{ij} = 0$, $y_i + c_{ij} < y_j \implies $ \\
+		$ t = \min \left( \{x_e : e \text{ obratna}\} \cup \{u_e-x_e : e \text{ prema}\}\right)$ \\
+		na premih povečamo za $t$, na obratnih pomanjšamo za $t$
+		\item nasičena: $x_{ij} = u_{ij}$, $y_i + c_{ij} > y_j \implies $ \\
+		$ t = \min \left( \{x_e : e \text{ prema}\} \cup \{u_e-x_e : e \text{ obratna}\}\right)$ \\
+		na premih pomanjšamo za $t$, na obratnih povečamo za $t$
+	\end{itemize}
+\end{itemize}
+
+Začetno dopustno drevesno rešitev poiščemo s pomožnim problemom:
+
+Izberemo koren $r \in V$. Za vsako vozlišče $v$:
+\begin{itemize}
+	\item $b_v < 0$ (proizvodnja): Če že obstaja povezava $vr$ z kapaciteto $u_{vr} \geq -b_v$, nastavimo razvoz na tej povezavi na $b_v$, sicer dodamo povezavo $vr$ z kapaciteto $\infty$ (dovolimo tudi več povezav med vozlišči).
+	\item $b_v \geq 0$ (poraba): Če že obstaja povezava $rv$ z kapaciteto $u_{rv} \geq b_v$, nastavimo razvoz na tej povezavi na $-b_v$, sicer dodamo povezavo $rv$ z kapaciteto $\infty$.
+\end{itemize}
+
+Umetne (dodane) povezav imajo ceno 1, prvotne pa 0. Prvotni problem je dopusten $\iff$ vrednost pomožnega problema enaka 0.
+
+
+\end{multicols}
+\end{document}
