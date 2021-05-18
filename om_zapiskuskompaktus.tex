@@ -587,6 +587,115 @@ Izberemo koren $r \in V$. Za vsako vozlišče $v$:
 
 Umetne (dodane) povezav imajo ceno 1, prvotne pa 0. Prvotni problem je dopusten $\iff$ vrednost pomožnega problema enaka 0.
 
+\pagebreak
+\section{Pretoki in prerezi}
+\begin{align*}
+	G = (V,E) \quad \dots \quad & \text{usmerjen graf}\\
+	s,t \in V \quad \dots \quad & \text{začetno in končno vozlišče} \\
+	u_e \in [0, \infty) \quad \dots \quad & \text{kapaciteta povezave}
+\end{align*}
+Iščemo pretok $x_e$, da veljajo Kirchoffovi zakoni in $0 \leq x_e \leq u_e$.
+\[ \sum_{\mathclap{\text{konec}(e) = v}} x_e \quad = \quad \sum_{\mathclap{\text{začetek}(e) = v}} x_e \qquad \forall v \in V \setminus \{s,t\} \]
+Radi bi \emph{maksimizirali} pretok:
+\[\sum_{\mathclap{\text{začetek}(e) = s}} x_e \quad = \quad  \sum_{\mathclap{\text{konec}(e) = t}} x_e \quad = v\]
+
+\subsubsection{Prevedba na problem razvoza}
+\begin{align*}
+	b_v = 0 & \quad \forall v \in V & c_e = 0 & \quad \forall e \in E \\
+\end{align*}
+\begin{align*}
+	u_e \text{ ostane nespremenjen}
+\end{align*}
+Dodamo povezavo $ts$ z kapaciteto $u_{ts} = \infty$ in ceno $c_{ts} = -1$.
+
+\subsubsection{Povečujoča pot}
+Zaporedje $s = v_0, v_1, \dots, v_k = t$, da $\forall i = 1, \dots, k$ velja:
+\begin{gather*}
+	v_{i-1} v_i \in E,\ x_{v_{i-1} v_i} < u_{v_{i-1} v_i} \\
+	\text{ali} \\
+	v_i v_{i-1} \in E,\ x_{v_{i-1} v_i} > 0 \\
+\end{gather*} 
+Pretok na premih povezavah povečujoče poti povečamo za $\varepsilon$ na obratnih pa pomanjšamo.
+\[ \varepsilon = \min\{x_e\ :\ e \text{ obratna}\} \cup \{u_e - x_e \ :\ e \text{ prema}\}\]
+
+\subsection{Prerez}
+Podmnožica $C \subseteq V$ je prerez, če velja $s \in C$ in $t \notin C$. Kapaciteta prereza je:
+\[ \sum_{\substack{i \in C \\ j \notin C}} u_{ij} \in [0,\infty) \]
+Prostornina pretoka $\leq$ kapaciteta prereza.
+
+Če je prostornina pretoka = kapaciteti prerza, je pretok maksimalen in prerez minimalen.
+
+Za problem pretoka velja natanko eno:
+\begin{itemize}
+	\item \emph{neomejen}: kapaciteta vsakega prereza je $\infty$
+	\item \emph{optimalen}: $\exists$ prerez katerega kapaciteta je enaka maksimalnemu pretoku
+\end{itemize}
+
+\section{Prirejanja in pokritja}
+Naj bo $G = (V, E)$ graf.
+
+$M \subseteq E$ je \textbf{prirejanje}, če $\forall e, f \in M, e \neq f \implies e \cap f = \emptyset$ \\
+$P \subseteq V$ je \textbf{pokritje}, če $\forall e \in E\ \exists v \in P:\ v \in E$
+
+$\mu(G)$ = velikost največjega prirejanja \\
+$\tau(G)$ = velikost najmanjšega pokritja
+
+$M$ prirejanje, $P$ pokritje $\implies$ $|M| \leq |P|$
+
+Če je $|M| = |P|$, je $M$ največje prirejanje in $P$ najmanjše pokritje in $\mu(G) = \tau(G) = |M| = |P|$.
+
+V splošnem velja le $\mu(G) \leq \tau(G)$, za dvodelne grafe pa $\mu(G) = \tau(G)$.
+
+$e \in E$ je \textbf{vezana}, če $e \in M$, sicer pa je \textbf{prosta}\\
+$v \in V$ je \textbf{vezano}, če $\exists e \in M:\ v \in e$, sicer pa je \textbf{prosto}
+
+\textbf{Alternirajoča pot} je pot na kateri se izmenjujejo proste in vezane povezave.
+
+\textbf{Povečujoča pot} je alternirajoča pot, ki se začen in konča v prostem vozlišču.
+
+Če na povečujoči poti zamenjamo proste in vezane povezave, dobimo za 1 večje prirejanje.
+
+$M$ je največje prirejanje $\iff$ ne obstaja povečujoča pot.
+
+\subsection{Madžarska metoda}
+$G = (V, E)$ dvodelni graf, $V = X \cup Y$, $M$ prirejanje
+
+$S = \{\text{prosta vozlišča v }X\}\quad $ $T = \emptyset$
+
+Vsak korak:
+\[S' = S \cup \left\{\substack{\text{vozlišča v $X$, do katerih lahko iz $T$}\\ \text{pridemo po vezanih povezavah}}\right\} \]
+\[T' = T \cup \left\{\substack{\text{vozlišča v $Y$, do katerih lahko iz $S$}\\ \text{pridemo po prostih povezavah}}\right\} \]
+
+Če $T$ vsebuje prosto vozlišče, imamo povečujočo pot, ki jo uporabimo za povečanje prirejanja.
+
+Sicer pa pridemo do koraka kjer je $T' = T$ in $S' = S$. V tem primeru je $M$ največje prirejanje.
+
+\subsubsection{Hallov izrek}
+$G = (V, E)$ dvodelni graf, $V = X \cup Y$
+\[ \exists\ \text{popolno prirejanje iz $X$ v $Y$} \iff \forall A \subseteq X:\ |A| \leq |N(A)| \]
+
+\subsection{Madžarska metoda z utežmi}
+Imamo plon graf $K_{n,n}$; povezava med $x_i$ in $y_j$ ima utež $c_{ij}$
+\[ c = [c_{ij}] \in \mathbb{R}^{n\times n}\]
+Popolno prirejanje je podano z $\pi \in S_n$: $x_i \sim y_{\pi(i)}$.
+
+Iščemo prirejanje z najmanjšo utežjo:
+\[\min_{\pi \in S_n} \sum_{i=1}^n c_{i \pi(i)}\]
+\emph{Interpretacija: Razporeditev $n$ opravi $n$ ljudem.}
+
+\subsubsection{Madžarska metoda - postopek}
+\begin{enumerate}
+	\item Od vsake vrstice odštejemo njen minimum.\\
+		Od vsakega stolpca odštejemo njegov minimum.
+		\emph{V vsaki vrstici in stoplpcu je vsaj ena ničla}
+	\item Pokrijemo vse ničle v matriki pokrijemo z manj kot $n$ vrsticami in stolpci.
+		\[ \varepsilon := \text{najmanjše nepokrito polje} > 0\]
+		\begin{itemize}
+			\item $2\times$ pokritim poljem prištejemo $\varepsilon$
+			\item nepokritim pa odštejemo $\varepsilon$
+		\end{itemize}
+	\item Če ne najdemo takih vrstic in stolpcev, lahko najdemo $n$ ničel v različnih vrsticah in stolpcih. To nam daje minimalno popolno prirejanje.
+\end{enumerate}
 
 \end{multicols}
 \end{document}
