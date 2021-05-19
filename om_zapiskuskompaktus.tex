@@ -824,7 +824,7 @@ $A$ konveksna $\iff$ poljubna konveksna kombinacija vektorjev iz $A$ v $A$.
 
 \textbf{Konveksna ogrinjača:} 
 \begin{align*}
-	\text{Conv}(A) =\ \bigcap_{\mathclap{\substack{K \text{ konv.}\\ A \subseteq K}}}\ K
+	\text{Conv}(A) = \varphi(A) =\ \bigcap_{\mathclap{\substack{K \text{ konv.}\\ A \subseteq K}}}\ K
 \end{align*}
 \begin{itemize}
 	\item $A \subseteq \text{Conv}(A)$
@@ -874,7 +874,90 @@ Konveksni stožec napet na $a_1, \dots, a_n \in \mathbb{R}^n$:
 \begin{align*}
 	\exists x \geq 0:\ Ax \leq b &\iff \forall y \geq 0:\ A^T y \geq 0 \implies b^Ty \geq 0
 \end{align*}
+
+\subsection{Konveksne funkcije}
+Naj bo $K^\text{konv} \subseteq \mathbb{R}^n$; funkcija $f: K \to \mathbb{R}$ je konveksna, če
+\begin{multline*}
+	\forall x,y \in K\ \forall \lambda \in [0,1]:\\ f((1-\lambda)x + \lambda y) \leq (1-\lambda)f(x) + \lambda f(y)
+\end{multline*}
+\emph{Funkcija je konveksna, če je definirana na konveksnem območju in graf vedno leži pod zveznico dveh točk na grafu.}
+
+Če zgoraj velja stroga neenakost, je funkcija \textbf{strogo konveksna}.
+
+$f$ strogo konveksna $\iff$ $H_f > 0$.
+
+Če ima strogo konveksna funkcija maksimum, je v \emph{ekstremni točki}.
+
+\subsection{Konkavne funkcije}
+Naj bo $K^\text{konv} \subseteq \mathbb{R}^n$; funkcija $f: K \to \mathbb{R}$ je konkavna, če
+\begin{multline*} 
+	\forall x,y \in K\ \forall \lambda \in [0,1]:\\ f((1-\lambda)x + \lambda y) \geq (1-\lambda)f(x) + \lambda f(y)
+\end{multline*}
+\noindent\rule{2cm}{0.4pt}
+
+
+Če je $f$ konveksna, je $-f$ konkavna.
+
+Funkcija $f$ je \textbf{afina} $\iff$ konveksna in konkavna
+
+\begin{itemize}
+	\item $f: K \to \mathbb{R}$, $c \geq 0$, $f$ konveksna $\implies$ $c\cdot f$ konveksna
+	\item $f,g: K \to \mathbb{R}$, $f,g$ konveksni $\implies$ $f + g$ konveksna
+	\item $g: K \to \mathbb{R}^n$ afina $\implies$ $g(K)$ konveksna\\
+		$f: g(K) \to \mathbb{R}$ konveksna $\implies$ $f \circ g$ konveksna
+	\item $g: K \to \mathbb{R}$, $f: \text{Conv}(g(K)) \to \mathbb{R}$, $f,g$ konveksni\\
+		$f$ naraščujoča $\implies$ $f \circ g$ konveksna
+\end{itemize}
+
 \subsection{Konveksne funkcije in optimizacija}
+Naj bo $A \subseteq \mathbb{R}^n$ in $f: A \to \mathbb{R}$.
+\begin{itemize}
+	\item $f$ ima v $x \in A$ \textbf{globalni maksimum}, če
+	\[ \forall x' \in A:\ f(x) \geq f(x')\]
+	\item $f$ ima v $x \in A$ \textbf{lokalni maksimum}, če
+	\[ \exists \varepsilon > 0:\ \forall x' \in A \cap K_\varepsilon (x):\ f(x) \geq f(x')\]
+\end{itemize}
+Če je $x$ lokalni minimum konveksne funkcije, je tudi globalni minimum.
+
+\subsubsection{Preverjanje konveksnosti funkcije}
+\textbf{S prvim odvodom}
+
+$f: K^{\text{konv, odp}} \to \mathbb{R}$ odvedlijva
+\[ f \text{ konveksna} \iff f(y) \geq f(x) + \left(\nabla f(x)\right)^T(y-x)\]
+
+\textbf{Z drugim odvodom}
+
+$f: \Omega^{\text{odp}} \subseteq \mathbb{R}^n \to \mathbb{R}$ dvakrat zvezno odvedljiva
+
+Hessejeva matrika:
+\[H_f = \begin{bmatrix}
+	\frac{\partial^2 f}{\partial x_i \partial x_j}
+\end{bmatrix}_{i,j = 1}^n\]
+
+$f$ konveksna $\iff$ $H_f \geq 0$
+
+$f: \Omega \to \mathbb{R}$ konveksna $\iff$ $h_{x,y}:I_{x,y} \to \mathbb{R}$, $h_{x,y}(\lambda) = f(x+\lambda y)$, konveksna za $\forall x \in \mathbb{R}\ \forall y \in \mathbb{R}^n$\\
+$I_{x,y} = \{\lambda \in \mathbb{R} : x+\lambda y \in \Omega\}$
+
+\noindent\rule{2cm}{0.4pt}
+
+\textbf{Lastne vrednosti} matrike $A$ so ničle karakterističnega polinoma $det(A - \lambda I)$.
+
+\textbf{Lastni podprostor} vrednosti $\lambda$ je $\text{Ker}(A-\lambda I) \setminus \{0\}$.
+
+$A \in \mathbb{R}^{n\times n}$ je \textbf{diagonalizabilna}, če ima $n$ linearno neodvisnih lastnih vektorjev. Tedaj je $A = PDP^{-1}$, kjer je $D$ diagonalna z lastnimi vrednostmi na diagonali, $P$ pa obrnljiva z lastnimi vektorji v stolpcih.
+
+Če je $A$ \textbf{simetrična} ($A^T = A$), so vse lastne vrednosti realne in $A$ je diagonalizabilna v ortonormirani bazi (lastni vektorji različnih lastnih vrednosti so $\perp$).
+
+Matrika $A$ je \textbf{pozitivno semidefinitna} ($A \geq 0$) \\
+$\iff$ vse lastne vrednosti $\lambda \geq 0$ \\
+$\iff$ $x^T A x = \sum_{i,j = 1}^n \geq 0$ \\
+$\iff$ vse podteterminante $\geq 0$ \\
+
+Matrika $A = \begin{bmatrix}
+	a & b \\
+	c & d
+\end{bmatrix}$ je $A \geq 0$ $\iff$ $ac - b^2 \geq 0$ in $a \geq 0$
 \subsection{Konveksne funkcije in vezani ekstremi}
 \section{Celoštevilski linearni programi}
 \end{multicols}
