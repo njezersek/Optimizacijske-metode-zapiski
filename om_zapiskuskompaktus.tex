@@ -160,38 +160,14 @@ To lahko zapišemo v matrični obliki:
 
 Vsak linearen program lahko zapišemo v standardni obliki.
 
-	Vse dele linearnega programa lahko preoblikujemo tako, da bodo v standardni obliki:
-	\begin{align*}
-		\min f(x) &\leadsto \max(-f(x)) \\
-		f(x) \geq b &\leadsto -f(x) \leq -b \\
-		f(x) = b &\leadsto f(x) \leq b \wedge f(x) \geq b \\
-		x_i \leq 0 &\leadsto x_i = -x_i' \\
-		x_i \gtrless 0 &\leadsto  x_i = x_i' - x_i'' \wedge x_i', x_i'' \geq 0
-	\end{align*}
-
-\subsection{Konveksne množice}
-Množica $A \subseteq \mathbb{R}^n $ je \emph{konveksna}, če velja:
-\[ \forall x,y \in A \ \forall \lambda \in [0,1] : (1-\lambda)x + \lambda y \in A \]
-\emph{Daljica med poljibnima točkama iz $A$ mora biti vsebovana v $A$.}\\
-
-Množica \textbf{ni} konveksna, če
-\[\exists x,y \in A \ \exists \lambda \in [0, 1]: (1-\lambda)x + \lambda y \notin A \]
-\textbf{Afina kombinacija:}
+Vse dele linearnega programa lahko preoblikujemo tako, da bodo v standardni obliki:
 \begin{align*}
-	\alpha_1 x_1 + \dots + \alpha_n x_n && \alpha_1 + \dots + \alpha_n = 1
+	\min f(x) &\leadsto \max(-f(x)) \\
+	f(x) \geq b &\leadsto -f(x) \leq -b \\
+	f(x) = b &\leadsto f(x) \leq b \wedge f(x) \geq b \\
+	x_i \leq 0 &\leadsto x_i = -x_i' \\
+	x_i \gtrless 0 &\leadsto  x_i = x_i' - x_i'' \wedge x_i', x_i'' \geq 0
 \end{align*}
-
-\textbf{Konveksna kombinacija:}
-\[ \alpha_1 x_1 + \dots + \alpha_n x_n \]
-\begin{align*}
-	\alpha_1 + \dots + \alpha_n = 1 && \alpha_1 + \dots + \alpha_n \geq 0 
-\end{align*}
-
-\emph{Afin podprostor} ( = zaprt za afine kokmbinacije = premaknjen linearen prostor) je \emph{konveksen}.
-
-Presek konveksnih množic $A_i, \forall i\in I$ je konveksen.
-
-Unija koknveksnih množic pa ni nujno konveksna.
 
 
 \subsection{Grafično reševanje linearnih programov}
@@ -807,6 +783,97 @@ vrni $d$, $\pi$
 \subsubsection{Floyd-Warshellov algoritem}
 
 \section{Konveksna optimizacija}
+\subsection{Afine množice}
+Množica $A \subseteq \mathbb{R}^n $, $A \neq \emptyset$ je \textbf{afina}, če velja:
+\[ \forall x,y \in A \ \forall \lambda \in \mathbb{R} : (1-\lambda)x + \lambda y \in A \]
+\emph{Premica med dvema poljibnima točkama iz $A$ mora biti vsebovana v $A$.}\\
+
+\textbf{Afina kombinacija:}
+\begin{align*}
+	\alpha_1 x_1 + \dots + \alpha_n x_n && \alpha_1 + \dots + \alpha_n = 1
+\end{align*}
+
+Naslednje trditve so ekvivalentne:
+\begin{itemize}
+	\item $A$ je afina
+	\item vsaka afina kombinacija vektorjev iz $A$ je v $A$
+	\item $A = V + a = \{ v + a\ |\ v \in V \}$\\ za nek $ V \in \mathbb{R}^n \text{ linearen podprostor}$ in $a \in \mathbb{R}^n$
+\end{itemize}
+
+\subsection{Konveksne množice}
+Množica $A \subseteq \mathbb{R}^n $ je \textbf{konveksna}, če velja:
+\[ \forall x,y \in A \ \forall \lambda \in [0,1] : (1-\lambda)x + \lambda y \in A \]
+\emph{Daljica med dvema poljibnima točkama iz $A$ mora biti vsebovana v $A$.}\\
+
+Množica \textbf{ni} konveksna, če
+\[\exists x,y \in A \ \exists \lambda \in [0, 1]: (1-\lambda)x + \lambda y \notin A \]
+
+\textbf{Konveksna kombinacija:}
+\begin{gather*}
+	\alpha_1 x_1 + \dots + \alpha_n x_n \\
+	\alpha_1 + \dots + \alpha_n = 1 \qquad \alpha_1 + \dots + \alpha_n \geq 0 
+\end{gather*}
+
+\emph{Afin podprostor} ( = zaprt za afine kokmbinacije = premaknjen linearen prostor) je \emph{konveksen}.
+
+Presek konveksnih množic $A_i, \forall i\in I$ je konveksen.
+
+Unija koknveksnih množic pa ni nujno konveksna.
+
+$A$ konveksna $\iff$ poljubna konveksna kombinacija vektorjev iz $A$ v $A$.
+
+\textbf{Konveksna ogrinjača:} 
+\begin{align*}
+	\text{Conv}(A) =\ \bigcap_{\mathclap{\substack{K \text{ konv.}\\ A \subseteq K}}}\ K
+\end{align*}
+\begin{itemize}
+	\item $A \subseteq \text{Conv}(A)$
+	\item $\text{Conv}(A)$ je konveksna
+	\item $A$ konveksna $\implies$ $\text{Conv}(A) = A$
+	\item $A \subseteq B$, $B$ konveksna $\implies$ $\text{Conv}(A) \subseteq B$
+	\item $\text{Conv}(A) = \{\text{konveksna kombinacija vektorjev iz $A$}\}$
+\end{itemize}
+
+\textbf{Ekstremna točka}:
+$a \in A^{\text{konv}}$ je ekstremna, če
+\begin{align*}
+	\forall x,y \in A,\ x,y \neq a:\  \nexists \lambda \in [0,1]:\ a = (1-\lambda)x + \lambda y
+\end{align*}
+\emph{Točka ni ekstremna, če laži v notranjosti kake daljice med točkama iz $A$.}
+
+Ekstremne točke vedno ležijo na robu. Robne toče pa niso nujno ekstremne.
+
+\subsection{Konveksni stožci}
+$A \subseteq \mathbb{R}^n$ je konveksni stožec, če
+\[ \forall x,y \in A\ \forall \lambda, \mu \geq 0: \ \lambda x + \mu y \in A \]
+Konveksni stožec, je konveksna množica, ni pa nujno obratno.
+
+Vsak linearni podprostor je konveksen stožec.
+
+Konveksni stožec napet na $a_1, \dots, a_n \in \mathbb{R}^n$:
+\[S(a_1, \dots, a_n) = \{\lambda_1 a_1 + \dots + \lambda_n a_n\ |\ \lambda_1, \dots, \lambda_n \geq 0\}\]
+
+\textbf{Dualni stožec} množice $A \subseteq \mathbb{R}^n$:
+\[ A^* = \left\{ x \in \mathbb{R}^n : x^T a \geq 0\ \forall a \in A \right\}\]
+
+\emph{V $A^*$ so vektorji, ki z vsemi vektorji iz $A$ tvorijo ostri kot.}
+
+\[ A \subseteq A^{**}\]
+
+\subsection{Farkaševa lema}
+\textbf{Geometrijska oblika:}
+\[ S^{**}(a_1, \dots, a_n) = S(a_1, \dots, a_n)\]
+\textbf{Algebraična oblika:}
+
+\emph{Prva varianta:}
+\begin{align*}
+	\exists x \geq 0:\ Ax = b &\iff \forall y:\ A^Ty \geq 0 \implies b^Ty \geq 0 \\
+	b \in S(a_1, \dots, a_n) &\iff b \in S^{**}(a_1, \dots, a_n)
+\end{align*}
+\emph{Druga varianta:}
+\begin{align*}
+	\exists x \geq 0:\ Ax \leq b &\iff \forall y \geq 0:\ A^T y \geq 0 \implies b^Ty \geq 0
+\end{align*}
 \subsection{Konveksne funkcije in optimizacija}
 \subsection{Konveksne funkcije in vezani ekstremi}
 \section{Celoštevilski linearni programi}
