@@ -33,6 +33,8 @@
 \usepackage{ifthen}
 \usepackage{tabularx}
 \usepackage[landscape]{geometry}
+\usepackage{listings}
+\usepackage{inconsolata}
 %\usepackage[colorlinks=true,citecolor=blue,linkcolor=blue]{hyperref}
 %\usepackage{accents}
 
@@ -62,6 +64,26 @@
 \setcounter{secnumdepth}{0}
 %\setlength{\parindent}{0pt}
 %\setlength{\parskip}{0pt plus 0.5ex}
+
+% listings okolje za psevdo kodo
+\lstnewenvironment{koda}[1][] %defines the algorithm listing environment
+{   
+    \lstset{ %this is the stype
+        mathescape=true,
+        basicstyle=\scriptsize, 
+		columns=flexible,
+        keywordstyle=\bfseries\em,
+        keywords={,vhod, izhod, zacetek, konec, koncamo, ponavljaj, dokler, ce, vrni, za, vsak, vse, v, sicer,} %add the keywords you want, or load a language as Rubens explains in his comment above.
+        xleftmargin=.1\textwidth,
+		tabsize=4,
+		%frame=leftline,xleftmargin=5pt,xrightmargin=5pt,framesep=5pt,
+		%inputencoding = utf8,
+		extendedchars = true,
+		literate={ž}{{\ˇz}}1 {š}{{\ˇs}}1 {č}{{\ˇc}}1 {Ž}{{\ˇZ}}1 {Š}{{\ˇS}}1 {Č}{{\ˇC}}1,
+        #1 % this is to add specific settings to an usage of this environment (for instnce, the caption and referable label)
+    }
+}
+{}
 % -----------------------------------------------------------------------
 
 \title{Optimizacijske metode}
@@ -697,5 +719,96 @@ Iščemo prirejanje z najmanjšo utežjo:
 	\item Če ne najdemo takih vrstic in stolpcev, lahko najdemo $n$ ničel v različnih vrsticah in stolpcih. To nam daje minimalno popolno prirejanje.
 \end{enumerate}
 
+\section{Iskanje najkrajše poti}
+\subsubsection{Pregled v širino (BFS) \small{$O(|V|+|E|)$}}
+\begin{koda}[]
+vhod: neutezen, neusmerjen graf $G$, zacetno vozlisce $r$
+izhod: razdalje med vozliscem $r$ in ostalimi
+$Q \leftarrow {r}$
+$d(r) \leftarrow 0$
+$\pi(r) \leftarrow $ NULL
+$\text{obiskan}(r) \leftarrow \text{NE}$
+za vsak $v \in V \setminus \{r\}$:
+	$d(v) \leftarrow \infty$
+	$\pi(v) \leftarrow $ NULL
+	$\text{obiskan}(v) \leftarrow \text{NE}$
+dokler $Q \neq \emptyset$:
+	$v \in Q$
+	$Q \leftarrow Q \setminus {v}$
+	$\text{obiskan}(v) \leftarrow \text{JA}$
+	za vsak $u \in N(v)$:
+		ce $\text{obiskan}(u) = \text{NE}$:
+			$d(u) \leftarrow d(v) + 1$
+			$\pi(u) = v$
+			$Q \leftarrow Q \cup \{u\}$
+vrni $d$, $\pi$
+\end{koda}
+
+\subsubsection{Dijkstrov algoritem}
+\begin{koda}
+vhod: usmerjen, utezen ($w_e \geq 0$) graf $G = (V,E)$, koren $r$
+izhod: razdalje med vozliscem $r$ in ostalimi
+$d(r) \leftarrow 0$
+$\pi(r) \leftarrow $ NULL
+za vsak $v \in V \setminus \{r\}$:
+	$d(v) \leftarrow \infty$
+	$\pi(v) \leftarrow $ NULL
+$Q \leftarrow V$
+dokler $Q \neq \emptyset$:
+	$v \leftarrow$ element $Q$ z min $d$
+	$Q \leftarrow Q \setminus {v}$
+	ce $d(v) = \infty$: 
+		koncamo
+	sicer:
+		za vsak $u \in N(v) \cap Q$:
+			ce $d(u) > d(v) + w_{vu}$:
+				$d(u) \leftarrow d(v) + w_{vu}$
+				$\pi(u) \leftarrow v$
+vrni $d$, $\pi$
+\end{koda}
+
+\subsubsection{Aciklični graf}
+\begin{koda}
+vhod: utezen, usmerjen graf $G = (V, E)$ brez ciklov
+izhod: topoloska urejenost $\varphi$
+za vsak $v \in V$:
+	$\text{st}(v) \leftarrow \deg^+(v)$
+	$i \leftarrow 1$
+dokler $\exists v \in V:\ st(v) = 0$:
+	$\varphi(v) \leftarrow i$
+	za vse $vu \in E$:
+		$\text{st}(u) \leftarrow \text{st}(u) - 1$
+	$i \leftarrow i + 1$
+ce $i \leq |V|$:
+	vrni FALSE
+sicer:
+	vrni $\varphi$
+\end{koda}
+
+\begin{koda}
+vhod: topoloska urejenost $\varphi$, koren $r$
+izhod: razdalje med vozliscem $r$ in ostalimi
+$d(r) \leftarrow 0$
+$\pi(r) \leftarrow$ NULL
+za vsak $v \in V \setminus \{r\}$:
+	$d(v) \leftarrow \infty$
+	$\pi(v) \leftarrow $ NULL
+$i \leftarrow \varphi(r)$
+za vsak $j \in \{i, i+1, \dots, |V|\}$:
+	$v \leftarrow \varphi^{-1}(j)$
+	za vsak $vu \in E$:
+		ce $d(u) = d(v) + w_{ue}$:
+			$d(u) \leftarrow d(v) + w_{vu}$
+			$\pi(u) \leftarrow v$
+vrni $d$, $\pi$
+\end{koda}
+
+\subsubsection{Bellman-Ford}
+\subsubsection{Floyd-Warshellov algoritem}
+
+\section{Konveksna optimizacija}
+\subsection{Konveksne funkcije in optimizacija}
+\subsection{Konveksne funkcije in vezani ekstremi}
+\section{Celoštevilski linearni programi}
 \end{multicols}
 \end{document}
