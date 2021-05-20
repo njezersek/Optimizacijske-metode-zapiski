@@ -959,6 +959,50 @@ Matrika $A = \begin{bmatrix}
 	c & d
 \end{bmatrix}$ je $A \geq 0$ $\iff$ $ac - b^2 \geq 0$ in $a \geq 0$
 \subsection{Konveksne funkcije in vezani ekstremi}
+\begin{align*}
+	\begin{array}{l r@{\;} l} % c@{\hspace{50pt}} r c r@{{}={}} r
+		\max / \min 		& f(x)	\\		
+		\text{p.p.} & x &\in \Omega^{\text{odp}} \subseteq \mathbb{R}^n \\
+		& g_1(x) &\leq 0 \\
+		& 									& \  \vdots \\										
+		& g_m(x) &\leq 0 \\
+	\end{array}
+\end{align*}
+\[D = \{ x \in \Omega: g_i(x) \leq 0\ \forall i = 1,\dots, m\}\]
+
+\subsubsection{Karush–Kuhn–Tuckerjevi pogoji}
+\[L(x,\lambda) = f(x) + \sum_{j=1}^m \lambda_j g_j (x)\]
+\begin{align*}
+	L_{x_i} &= 0 & \forall i = 1, \dots, n \\
+	\lambda_j g_j &= 0 & \forall j = 1, \dots, m \\
+	g_j &\leq 0 & \forall j = 1, \dots, m \\
+	\lambda_j &\geq 0 & \forall j = 1, \dots, m \\
+\end{align*}
+\emph{V splošnem KKT pogoji niso ne potrebni ne zadostni za globalni/lokalni ekstrem.}
+
+\begin{itemize}
+	\item $\Omega$ odprta, konveksna množica, $f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ konveksna, odvedljiva \\
+			Če $x^*$ ustreza KKT pogojem, je globalni minimum.
+	\item $\Omega$ odprta, $f: \Omega \to \mathbb{R}$ odvedljiva, $g_1, \dots, g_m: \Omega \to \mathbb{R}$.\\
+			Če velja vsaj ena izmed trditev:
+			\begin{itemize}
+				\item $g_1, \dots, g_m$ afine
+				\item $\Omega$ konveksna, $f, g_1, \dots, g_m$ konveksne in notranjost $ D^\circ \neq \emptyset$
+				\item množica vektorjev $\{\nabla g_1(x^*), \dots, \nabla g_m(x^*)\}$
+			\end{itemize}
+			potem v $x^*$ veljajo KKT pogoji.
+\end{itemize}
+Za konveksni problem z $D^\circ \neq \emptyset$ so KKT pogoji \\$\iff$ $x^*$ globalni minimum.
+
 \section{Celoštevilski linearni programi}
+\begin{align*}
+	\begin{array}{l@{\hspace{10pt}} c}
+		\max & c^Tx \\
+		\text{p.p.} & Ax \leq b \\
+		& x \geq 0 \\
+		& x \in \mathbb{Z}
+	\end{array}
+\end{align*}
+
 \end{multicols}
 \end{document}
