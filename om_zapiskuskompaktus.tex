@@ -928,7 +928,7 @@ Naj bo $A \subseteq \mathbb{R}^n$ in $f: A \to \mathbb{R}$.
 \subsubsection{Preverjanje konveksnosti funkcije}
 \textbf{S prvim odvodom}
 
-$f: K^{\text{konv, odp}} \to \mathbb{R}$ odvedlijva
+$f: K^{\text{konv, odp}} \to \mathbb{R}$ odvedljiva
 \[ f \text{ konveksna} \iff f(y) \geq f(x) + \left(\nabla f(x)\right)^T(y-x)\]
 
 \textbf{Z drugim odvodom}
@@ -958,7 +958,9 @@ $A \in \mathbb{R}^{n\times n}$ je \textbf{diagonalizabilna}, če ima $n$ linearn
 Matrika $A$ je \textbf{pozitivno semidefinitna} ($A \geq 0$) \\
 $\iff$ vse lastne vrednosti $\lambda \geq 0$ \\
 $\iff$ $x^T A x = \sum_{i,j = 1}^n a_{ij} x_i x_j \geq 0$ \\
-$\iff$ vse podteterminante $\geq 0$ \\
+$\iff$ vse glavne poddeterminante$\geq 0$ \\
+
+\emph{Glavne poddeterminante dobimo tako, da izbiršemo nekatere vrstice in stolpce z enakimi indeksi.}
 
 Matrika $A = \begin{bmatrix}
 	a & b \\
@@ -967,7 +969,7 @@ Matrika $A = \begin{bmatrix}
 \subsection{Konveksne funkcije in vezani ekstremi}
 \begin{align*}
 	\begin{array}{l r@{\;} l} % c@{\hspace{50pt}} r c r@{{}={}} r
-		\max / \min 		& f(x)	\\		
+		\min 		& f(x)	\\		
 		\text{p.p.} & x &\in \Omega^{\text{odp}} \subseteq \mathbb{R}^n \\
 		& g_1(x) &\leq 0 \\
 		& 									& \  \vdots \\										
@@ -975,29 +977,37 @@ Matrika $A = \begin{bmatrix}
 	\end{array}
 \end{align*}
 \[D = \{ x \in \Omega: g_i(x) \leq 0\ \forall i = 1,\dots, m\}\]
+$f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ zvezno odvedljive\\
 
 \subsubsection{Karush–Kuhn–Tuckerjevi pogoji}
+
+\textbf{Lagrangeeva funkcija}
 \[L(x,\lambda) = f(x) + \sum_{j=1}^m \lambda_j g_j (x)\]
+
+$x^* \in \Omega$ zadošča pogojem KKT, če $\exists \lambda_1, \dots, \lambda_m \geq 0$, da velja:
 \begin{align*}
-	L_{x_i} &= 0 & \forall i = 1, \dots, n \\
-	\lambda_j g_j &= 0 & \forall j = 1, \dots, m \\
-	g_j &\leq 0 & \forall j = 1, \dots, m \\
-	\lambda_j &\geq 0 & \forall j = 1, \dots, m \\
+	L_{x_i}(x^*) &= 0 & \forall i = 1, \dots, n \\
+	\lambda_j g_j(x^*) &= 0 & \forall j = 1, \dots, m \\
+	g_j(x^*) &\leq 0 & \forall j = 1, \dots, m \\
 \end{align*}
 \emph{V splošnem KKT pogoji niso ne potrebni ne zadostni za globalni/lokalni ekstrem.}
 
+
+\textbf{Potrebnost pogojev KKT optimalnost:} \\
+Če ima $f$ v točki $x^* \in D$ lokalni min na $D$ in so vezi v $x^*$ regularne, točka $x^*$ zadošča pogojem KKT.
+
+\textbf{Zadostni pogoji za regularnost vezi:} \\
+Če velja vsaj en od pogojev so vezi v $x^*$ regularne.
 \begin{itemize}
-	\item $\Omega$ odprta, konveksna množica, $f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ konveksna, odvedljiva \\
-			Če $x^*$ ustreza KKT pogojem, je globalni minimum.
-	\item $\Omega$ odprta, $f: \Omega \to \mathbb{R}$ odvedljiva, $g_1, \dots, g_m: \Omega \to \mathbb{R}$.\\
-			Če velja vsaj ena izmed trditev:
-			\begin{itemize}
-				\item $g_1, \dots, g_m$ afine
-				\item $\Omega$ konveksna, $f, g_1, \dots, g_m$ konveksne in notranjost $ D^\circ \neq \emptyset$
-				\item množica vektorjev $\{\nabla g_1(x^*), \dots, \nabla g_m(x^*)\}$ je linearno neodvisna
-			\end{itemize}
-			potem v $x^*$ veljajo KKT pogoji.
+	\item $g_1, \dots, g_m$ afine
+	\item $\Omega$ konveksna, $f, g_1, \dots, g_m$ konveksne in notranjost $ D^\circ \neq \emptyset$
+	\item množica vektorjev $\{\nabla g_1(x^*), \dots, \nabla g_m(x^*)\}$ je linearno neodvisna
 \end{itemize}
+
+\textbf{Zadostnost pogojev KKT za optimalnost:} \\
+$\Omega$ odprta, konveksna množica, $f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ konveksne in odvedljive \\
+Če $x^*$ ustreza KKT pogojem, je globalni minimum.
+
 Za konveksni problem z $D^\circ \neq \emptyset$ so KKT pogoji \\$\iff$ $x^*$ globalni minimum.
 
 \section{Celoštevilski linearni programi}
