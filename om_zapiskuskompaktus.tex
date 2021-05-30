@@ -642,6 +642,8 @@ $M$ prirejanje, $P$ pokritje $\implies$ $|M| \leq |P|$
 
 Če je $|M| = |P|$, je $M$ največje prirejanje in $P$ najmanjše pokritje in $\mu(G) = \tau(G) = |M| = |P|$.
 
+Prirejanje je \textbf{maksimalno}, če ni vsebovano v nobenem večjem prirejanju.
+
 V splošnem velja le $\mu(G) \leq \tau(G)$, za dvodelne grafe pa $\mu(G) = \tau(G)$.
 
 $e \in E$ je \textbf{vezana}, če $e \in M$, sicer pa je \textbf{prosta}\\
@@ -808,6 +810,9 @@ Množica $A \subseteq \mathbb{R}^n $ je \textbf{konveksna}, če velja:
 Množica \textbf{ni} konveksna, če
 \[\exists x,y \in A \ \exists \lambda \in [0, 1]: (1-\lambda)x + \lambda y \notin A \]
 
+Naj bo $\Omega^{\text{konv}} \subseteq \mathbb{R}^n$ in $g_i: \Omega \to \mathbb{R}$ konv. fun.\\
+Tedaj je $D = \{ x \in \Omega\ |\ g_i(x) \leq 0\ \forall i\}$ \textbf{konveksna}.
+
 \textbf{Konveksna kombinacija:}
 \begin{gather*}
 	\alpha_1 x_1 + \dots + \alpha_n x_n \\
@@ -823,9 +828,10 @@ Unija koknveksnih množic pa ni nujno konveksna.
 $A$ konveksna $\iff$ poljubna konveksna kombinacija vektorjev iz $A$ v $A$.
 
 \textbf{Konveksna ogrinjača:} 
-\begin{align*}
-	\text{Conv}(A) = \varphi(A) =\ \bigcap_{\mathclap{\substack{K \text{ konv.}\\ A \subseteq K}}}\ K
-\end{align*}
+\begin{gather*}
+	\text{Conv}(A) = \mathcal{C}(A) =\ \bigcap_{\mathclap{\substack{K \text{ konv.}\\ A \subseteq K}}}\ K \\
+	= \left\{ \sum_{i=1}^k \lambda_i x_i\ \middle|\ k \in \mathbb{N},\ \lambda_i \geq 0,\ \sum_{i=1}^k \lambda_i = 1,\ x_i \in A \right\}
+\end{gather*}
 \begin{itemize}
 	\item $A \subseteq \text{Conv}(A)$
 	\item $\text{Conv}(A)$ je konveksna
@@ -951,7 +957,7 @@ $A \in \mathbb{R}^{n\times n}$ je \textbf{diagonalizabilna}, če ima $n$ linearn
 
 Matrika $A$ je \textbf{pozitivno semidefinitna} ($A \geq 0$) \\
 $\iff$ vse lastne vrednosti $\lambda \geq 0$ \\
-$\iff$ $x^T A x = \sum_{i,j = 1}^n \geq 0$ \\
+$\iff$ $x^T A x = \sum_{i,j = 1}^n a_{ij} x_i x_j \geq 0$ \\
 $\iff$ vse podteterminante $\geq 0$ \\
 
 Matrika $A = \begin{bmatrix}
@@ -988,7 +994,7 @@ Matrika $A = \begin{bmatrix}
 			\begin{itemize}
 				\item $g_1, \dots, g_m$ afine
 				\item $\Omega$ konveksna, $f, g_1, \dots, g_m$ konveksne in notranjost $ D^\circ \neq \emptyset$
-				\item množica vektorjev $\{\nabla g_1(x^*), \dots, \nabla g_m(x^*)\}$
+				\item množica vektorjev $\{\nabla g_1(x^*), \dots, \nabla g_m(x^*)\}$ je linearno neodvisna
 			\end{itemize}
 			potem v $x^*$ veljajo KKT pogoji.
 \end{itemize}
