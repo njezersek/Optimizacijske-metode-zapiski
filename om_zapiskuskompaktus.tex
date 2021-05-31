@@ -21,7 +21,7 @@
 
 \frenchspacing % No double spacing between sentences
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{0.3em}
+\setlength{\parskip}{0.7em}
 
 \usepackage{mathtools}
 \usepackage{blkarray, bigstrut} %
@@ -585,7 +585,6 @@ Izberemo koren $r \in V$. Za vsako vozlišče $v$:
 
 Umetne (dodane) povezav imajo ceno 1, prvotne pa 0. Prvotni problem je dopusten $\iff$ vrednost pomožnega problema enaka 0.
 
-\pagebreak
 \section{Pretoki in prerezi}
 \begin{align*}
 	G = (V,E) \quad \dots \quad & \text{usmerjen graf}\\
@@ -967,6 +966,9 @@ Matrika $A = \begin{bmatrix}
 	c & d
 \end{bmatrix}$ je $A \geq 0$ $\iff$ $ac - b^2 \geq 0$ in $a \geq 0$
 \subsection{Konveksne funkcije in vezani ekstremi}
+$\Omega \subseteq \mathbb{R}$ odprta\\
+$f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ zvezno odvedljive\\
+$D = \{ x \in \Omega: g_i(x) \leq 0\ \forall i = 1,\dots, m\} $\\
 \begin{align*}
 	\begin{array}{l r@{\;} l} % c@{\hspace{50pt}} r c r@{{}={}} r
 		\min 		& f(x)	\\		
@@ -976,8 +978,6 @@ Matrika $A = \begin{bmatrix}
 		& g_m(x) &\leq 0 \\
 	\end{array}
 \end{align*}
-\[D = \{ x \in \Omega: g_i(x) \leq 0\ \forall i = 1,\dots, m\}\]
-$f, g_1, \dots, g_m : \Omega \to \mathbb{R}$ zvezno odvedljive\\
 
 \subsubsection{Karush–Kuhn–Tuckerjevi pogoji}
 
@@ -1020,5 +1020,15 @@ Za konveksni problem z $D^\circ \neq \emptyset$ so KKT pogoji \\$\iff$ $x^*$ glo
 	\end{array}
 \end{align*}
 
+Če želimo, da je $\delta = 1$ natanko tedaj ko je $x > 0$, dodamo pogoj:
+\[ \frac{x}{M} \geq \delta \geq M x \qquad \delta \in \{0,1\}\]
+Kjer je $M$ neko dovoj veliko število, da je vedno $\frac{x}{M} \leq 1$.
+
+Za $\delta_i \in \{0,1\}$ se logični izrazi lahko pretvorijo v pogoje:
+\begin{align*}
+	\delta_1 = 1 \vee \delta_2 = 1 &\leadsto& \delta_1 + \delta_2 \geq 1 \\
+	\delta_1 = 1 \wedge \delta_2 = 1 &\leadsto& \delta_1 \geq 1, \  \delta_2 \geq 1 \\
+	\delta_1 = 1 \implies \delta_2 = 1 &\leadsto& 1 - \delta_1 + \delta_2 \geq 1, \ \delta_2 \geq \delta_1 \\
+\end{align*}
 \end{multicols}
 \end{document}
