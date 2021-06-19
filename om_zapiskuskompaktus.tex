@@ -116,14 +116,14 @@ $x^* \in \Omega$ je \emph{optimalna} rešitev problema $(\Omega, f, \max)$, če 
 			[{Neomejen \\ \textit{kriterijska f. neomejena} \\ $\max x$ \\ p.p. $x\geq 0$}, align=center]   
 			[Omejen \\ \textit{kriterijska f. omejena}, align=center
 				[Optimalni \\ \textit{zaprta meja} \\ $\max x$ \\ p.p. $0 \leq x \leq 1$, align=center]
-				[Neoptimalni \\ \textit{odprta meja} \\ $\max x$ \\ p.p. $0 \leq x \leq 1$, align=center]
+				[Neoptimalni \\ \textit{odprta meja} \\ $\max x$ \\ p.p. $0 < x < 1$, align=center]
 			]
 		]   
 	] 
 \end{forest}
 
 \section{Linearno programiranje}
-$(\Omega, f, \text{min/max})$ je linearni porgram, če je $\Omega$ podana z linearnimi enakostmi in neenakostmi ($\leq$, $\geq$) in je $f$ linearna.
+$(\Omega, f, \text{min/max})$ je linearni porgram, če je $\Omega$ podana z linearnimi enakostmi in neenakostmi ($\leq$, $\geq$) in je $f$ linearna (\emph{ne dovolimo $<,>$}). 
 
 \subsection{Standardna oblika linearnega pograma}
 Linearni porgram je v \emph{standardni} obliki, če iščemo $\max$ in so vsi pogoji neenakosti $\leq$ in so vse spremenljivke nenegativne.
@@ -168,6 +168,7 @@ Vse dele linearnega programa lahko preoblikujemo tako, da bodo v standardni obli
 	x_i \leq 0 &\leadsto x_i = -x_i' \\
 	x_i \gtrless 0 &\leadsto  x_i = x_i' - x_i'' \wedge x_i', x_i'' \geq 0
 \end{align*}
+(\emph{$\gtrless$ je oznaka za neomejeno vrednost})
 
 
 \subsection{Grafično reševanje linearnih programov}
@@ -327,7 +328,7 @@ Njegov dual pa je:
 \begin{align*}
 	\begin{array}{l r@{\;} l >{\scriptsize}l}
 		\min 		& \sum_{i=1}^m b_i y_i	\\		
-		\text{p.p.} & \sum_{i=1}^m a_{ij} y_i 	&\leq c_j	& \forall j=1,\dots , n'\\
+		\text{p.p.} & \sum_{i=1}^m a_{ij} y_i 	&\geq c_j	& \forall j=1,\dots , n'\\
 					& \sum_{i=1}^m a_{ij} y_i 	&= c_j	& \forall j=n'+1,\dots , n\\
 					& y_i 	 					&\geq 0	&\forall i=1,\dots , m'
 	\end{array}
